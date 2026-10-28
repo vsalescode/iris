@@ -1,3 +1,3 @@
-"""E-mail. Por enquanto: Gmail, só leitura (veja gmail.py).
-Responder/enviar vem depois, e sempre com confirmação.
+"""E-mail pelo Gmail (veja gmail.py): ler, responder, enviar e encaminhar.
+Enviar qualquer coisa sempre passa pela confirmação do usuário.
 """

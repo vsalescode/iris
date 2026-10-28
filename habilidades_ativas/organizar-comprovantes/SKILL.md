@@ -14,7 +14,7 @@ Use `procurar_arquivo` com palavras como boleto, fatura, comprovante, nota, nf, 
 
 ## 2. O padrão (proponha, mas ele pode trocar)
 - Pastas: `Documentos/Financeiro/AAAA/MM - mês`, por exemplo `Documentos/Financeiro/2026/10 - outubro`.
-- Nome: `AAAA-MM-DD Empresa - Tipo - Descrição.pdf`, por exemplo `2026-10-25 InfinitePay - Boleto - Parcelamento.pdf`.
+- Nome: `AAAA-MM-DD Empresa - Tipo - Descrição.pdf`, por exemplo `2026-03-05 Loja Exemplo - Boleto - Parcela 2.pdf`.
 - Sem caracteres especiais além do hífen, nome da empresa com inicial maiúscula e a extensão original mantida.
 - O que não foi identificado vai para `Documentos/Financeiro/_Revisar`.
 
