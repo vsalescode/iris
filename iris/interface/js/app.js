@@ -12,13 +12,13 @@ import { Ouvinte } from "./ouvir.js";
 import * as audio from "./audio.js";
 import * as painel from "./painel.js";
 
-/** A íris 3D (precisa do Three.js da internet); se falhar, usa o núcleo 2D. */
+/** A lente 3D (precisa do Three.js da internet); se falhar, usa o núcleo 2D. */
 async function criarPresenca(canvas) {
   try {
-    const { Olho } = await import("./olho.js");
-    return new Olho(canvas);
+    const { Lente } = await import("./lente.js");
+    return new Lente(canvas);
   } catch (erro) {
-    console.warn("Íris 3D indisponível, usando o núcleo 2D", erro);
+    console.warn("Lente 3D indisponível, usando o núcleo 2D", erro);
     return new Nucleo(canvas);
   }
 }
