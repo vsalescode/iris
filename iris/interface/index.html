@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IRIS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@200;300;400&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/hud.css">
+  <script type="importmap">
+    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+  </script>
+</head>
+<body data-estado="IDLE">
+  <!-- a presença dela: ocupa a tela toda -->
+  <canvas id="orbe"></canvas>
+  <div class="vinheta"></div>
+
+  <!-- cantos discretos -->
+  <div class="canto sup-esq">
+    <span class="marca">IRIS</span>
+    <span class="estado" id="estado-texto">em espera</span>
+  </div>
+  <div class="canto sup-dir">
+    <span id="relogio">--:--</span>
+    <span class="ponto" id="ponto-ia" title="Conexão com a IA"></span>
+    <button class="icone" id="abrir-digitar" title="Digitar para a Iris (/)">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h.01M11 10h.01M15 10h.01M7 14h10"/></svg>
+    </button>
+    <button class="icone" id="abrir-gaveta" title="Registro e sistema (Tab)">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+    </button>
+    <button class="icone" id="abrir-config" title="Configurações">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- avisos rápidos (ações, erros) -->
+  <div class="avisos" id="avisos"></div>
+
+  <!-- rascunho esperando sua confirmação (ex.: e-mail a enviar) -->
+  <section class="rascunho" id="rascunho" hidden>
+    <h2 id="rascunho-acao">Rascunho</h2>
+    <dl>
+      <dt id="rascunho-rotulo1">Para</dt><dd id="rascunho-para"></dd>
+      <dt id="rascunho-rotulo2">Assunto</dt><dd id="rascunho-assunto"></dd>
+    </dl>
+    <div class="rascunho-texto" id="rascunho-texto"></div>
+    <p class="rascunho-dica" id="rascunho-dica">Diga “pode enviar” ou “cancela”</p>
+  </section>
+
+  <!-- a fala: uma linha só, de quem estiver falando -->
+  <div class="legenda" id="legenda" data-quem=""></div>
+  <div class="dica" id="dica">diga “Iris”</div>
+
+  <!-- digitar em vez de falar (e-mails, links, nomes difíceis) -->
+  <form class="digitar" id="digitar" hidden autocomplete="off">
+    <input type="text" id="digitar-texto" placeholder="Digite para a Iris…   (Enter envia · Esc fecha)">
+  </form>
+
+  <!-- gaveta (Tab): registro da conversa e do sistema -->
+  <aside class="gaveta" id="gaveta">
+    <button class="icone fechar" id="fechar-gaveta" title="Fechar (Esc)">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <h2>Pendências <span class="contador" id="pendencias-total"></span></h2>
+    <p class="futuro" id="pendencias-vazia">Nada pendente. A vigília avisa quando algo importar.</p>
+    <ul class="memoria" id="pendencias"></ul>
+    <h2>Pensamentos</h2>
+    <p class="futuro" id="pensamentos-vazio">A primeira ronda da vigília acontece logo após ligar.</p>
+    <ol class="log pensamentos" id="pensamentos"></ol>
+    <h2>Habilidades <span class="contador" id="habilidades-total"></span></h2>
+    <ul class="memoria habilidades" id="habilidades-propostas"></ul>
+    <ul class="memoria habilidades" id="habilidades-ativas"></ul>
+    <h2>Personalidade <span class="contador" id="personalidade-total"></span></h2>
+    <p class="futuro" id="personalidade-vazia">Ela ainda não aprendeu nada sobre o seu jeito. Quando notar algo, propõe aqui.</p>
+    <ul class="memoria habilidades" id="personalidade-propostas"></ul>
+    <ul class="memoria" id="personalidade-jeitos"></ul>
+    <h2>Memória <span class="contador" id="memoria-total"></span></h2>
+    <p class="futuro" id="memoria-vazia">Ela ainda não guardou nada sobre você.</p>
+    <ul class="memoria" id="memoria-assuntos"></ul>
+    <ul class="memoria" id="memoria-fatos"></ul>
+    <h2>Registro</h2>
+    <ol class="log" id="log"></ol>
+    <h2>Sistema</h2>
+    <dl class="sistema">
+      <dt>Estado</dt><dd id="status-estado">IDLE</dd>
+      <dt>Modo</dt><dd id="status-modo">espera</dd>
+      <dt>IA</dt><dd id="status-ia">offline</dd>
+      <dt>Link</dt><dd id="status-ws">conectando</dd>
+      <dt>CPU</dt><dd><span class="barra"><i id="barra-cpu"></i></span> <span id="valor-cpu">--%</span></dd>
+      <dt>RAM</dt><dd><span class="barra"><i id="barra-ram"></i></span> <span id="valor-ram">--%</span></dd>
+    </dl>
+    <h2>Descobertas</h2>
+    <p class="futuro">em breve</p>
+  </aside>
+
+  <dialog class="config" id="config">
+    <form method="dialog" id="form-config">
+      <h2>Configurações</h2>
+      <label>Como a Iris deve te chamar?
+        <input type="text" id="cfg-nome" placeholder="Seu nome" autocomplete="off">
+      </label>
+      <label>Voz
+        <span class="linha-voz">
+          <select id="cfg-voz"></select>
+          <button type="button" class="botao" id="cfg-ouvir" title="Ouvir amostra">▶ Ouvir</button>
+        </span>
+      </label>
+      <div id="cfg-ajustes-edge">
+        <label>Velocidade <output id="cfg-velocidade-valor">+0%</output>
+          <input type="range" id="cfg-velocidade" min="-30" max="30" step="5" value="0">
+        </label>
+        <label>Tom <output id="cfg-tom-valor">+0Hz</output>
+          <input type="range" id="cfg-tom" min="-20" max="20" step="2" value="0">
+        </label>
+      </div>
+      <p class="nota">Na conversa (Gemini Live) ela usa as vozes Gemini. Vozes Edge só valem no modo reserva.</p>
+      <h3>Personalidade</h3>
+      <p class="nota">Também por voz: “Iris, humor em 80%”, “menos sarcasmo”, “seja mais formal”.</p>
+      <div class="tracos" id="cfg-tracos"></div>
+      <div class="acoes">
+        <button value="cancelar" class="botao secundario">Cancelar</button>
+        <button value="salvar" class="botao" id="cfg-salvar">Salvar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
