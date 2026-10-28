@@ -12,13 +12,13 @@ import { Ouvinte } from "./ouvir.js";
 import * as audio from "./audio.js";
 import * as painel from "./painel.js";
 
-/** O orbe 3D (precisa do Three.js da internet); se falhar, usa o núcleo 2D antigo. */
+/** A íris 3D (precisa do Three.js da internet); se falhar, usa o núcleo 2D. */
 async function criarPresenca(canvas) {
   try {
-    const { Orbe } = await import("./orbe.js");
-    return new Orbe(canvas);
+    const { Olho } = await import("./olho.js");
+    return new Olho(canvas);
   } catch (erro) {
-    console.warn("Orbe 3D indisponível, usando o núcleo 2D", erro);
+    console.warn("Íris 3D indisponível, usando o núcleo 2D", erro);
     return new Nucleo(canvas);
   }
 }

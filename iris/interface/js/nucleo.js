@@ -3,10 +3,10 @@
 // PENSANDO (gira e processa), FALANDO (ondas sincronizadas com o áudio).
 
 const CORES = {
-  IDLE: [62, 232, 255],
-  OUVINDO: [154, 244, 255],
-  PENSANDO: [90, 140, 255],
-  FALANDO: [62, 232, 255],
+  IDLE: [255, 92, 150],
+  OUVINDO: [255, 170, 205],
+  PENSANDO: [158, 108, 255],
+  FALANDO: [255, 80, 140],
 };
 
 export class Nucleo {
