@@ -1,0 +1,60 @@
+# Permissões da Iris. A Iris NUNCA edita este arquivo – só você.
+# Vale na hora: não precisa reiniciar.
+# Níveis: AUTONOMO (faz sozinha), PERGUNTAR (pede sua confirmação em voz), PROIBIDO (nunca).
+# Qualquer ação que não estiver listada aqui é tratada como PERGUNTAR.
+
+acoes:
+  # Ajustes dela mesma, quando você pede por voz
+  iris.personalidade: AUTONOMO
+  iris.preferencias: AUTONOMO
+  # Personalidade que evolui: propor é livre; aplicar SEMPRE pede seu sim
+  iris.propor_jeito: AUTONOMO
+  iris.propor_traco: AUTONOMO
+  iris.aprovar_personalidade: PERGUNTAR
+  iris.esquecer_jeito: AUTONOMO
+  # Memória
+  memoria.ler: AUTONOMO
+  memoria.lembrar: AUTONOMO
+  memoria.esquecer: AUTONOMO
+  # Pendências da vigília: tirar da fila quando você decidir
+  pendencias.tratar: AUTONOMO
+  # Habilidades (SKILL.md): ler e propor são livres; ATIVAR sempre pede sua confirmação
+  habilidades.usar: AUTONOMO
+  habilidades.propor: AUTONOMO
+  habilidades.ativar: PERGUNTAR
+  # Oficina: encomendar programas ao Claude Code
+  oficina.encomendar: PERGUNTAR   # sempre confirma (usa o seu plano do Claude)
+  oficina.ver: AUTONOMO
+  oficina.aprovar: PERGUNTAR     # sempre confirma
+  oficina.usar: AUTONOMO         # só programas que você aprovou; mude para PERGUNTAR se quiser
+  # PC
+  programas.abrir: AUTONOMO
+  navegador.abrir: AUTONOMO
+  arquivos.listar: AUTONOMO
+  arquivos.procurar: AUTONOMO
+  arquivos.ler: AUTONOMO
+  arquivos.criar: PERGUNTAR
+  arquivos.mover: PERGUNTAR
+  arquivos.apagar: PROIBIDO
+  # E-mail
+  email.ler: AUTONOMO
+  email.resumir: AUTONOMO
+  email.responder: PERGUNTAR
+  email.enviar: PERGUNTAR
+  email.encaminhar: PERGUNTAR
+  pagamentos: PROIBIDO
+
+# Zonas liberadas: pastas que a vigília observa em segundo plano (só nome, tamanho e data
+# dos arquivos novos; nunca altera nada sozinha).
+# Aceita apelidos (Downloads, Área de Trabalho, Documentos, Imagens...) ou caminhos completos.
+# Pastas fora da sua pasta de usuário colocadas aqui também ficam liberadas para as ferramentas.
+zonas_liberadas:
+  - Downloads
+  - Área de Trabalho
+
+# Nunca lidas, exploradas nem enviadas à nuvem.
+zonas_privadas: []
+#  - C:\Users\SEU_USUARIO\Documentos\Pessoal
+
+# Limite diário de chamadas à IA para exploração (reservado para a exploração, em breve).
+orcamento_curiosidade_diario: 20
