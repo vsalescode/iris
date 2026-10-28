@@ -15,6 +15,8 @@ A IA roda na nuvem, nos planos gratuitos do Google Gemini e do Groq. O seu PC s�
 - Habilidades. São manuais em Markdown que ensinam procedimentos a ela (organizar downloads, briefing do dia, e-mail profissional...). Ela consegue escrever novas, que ficam esperando sua aprovação.
 - Oficina (opcional). Quando falta uma capacidade, ela encomenda um programa pequeno ao Claude Code, que escreve, testa e entrega. O programa só roda depois que você aprova.
 
+A lista completa, com cada ferramenta, o que ela cria sozinha e como aprovar, está em [RECURSOS.md](RECURSOS.md).
+
 Tudo passa por um arquivo de permissões que só você edita. Ela nunca apaga arquivos, nunca mexe nas pastas que você marcar como privadas e registra tudo o que faz num log.
 
 ## Do que você precisa
