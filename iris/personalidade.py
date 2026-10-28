@@ -1,7 +1,7 @@
 """Personalidade da Iris em três camadas:
 
 1. personalidade.md          quem ela é e os limites dela. Só você edita; ela nunca muda isso.
-2. Ajustes de 0 a 100%       estilo TARS (Interestelar). Os 6 de base estão em TRACOS; ela pode
+2. Ajustes de 0 a 100%       Os 6 de base estão em TRACOS; ela pode
                              propor traços novos. Os níveis ficam em configuracao.yaml (seção
                              `personalidade:`): engrenagem ou voz ("Iris, humor em 75%").
 3. O jeito aprendido         frases curtas sobre como agir com você, que ela aprende nas conversas.
@@ -48,7 +48,7 @@ TRACOS = {
         "Informal e natural.",
         "Equilibrada e educada.",
         "Formal e polida, estilo mordomo; chama ele de 'senhor' de vez em quando.",
-        "Muito formal: sempre 'senhor', linguagem refinada, estilo JARVIS.",
+        "Muito formal: sempre 'senhor', linguagem refinada, de mordomo.",
     ]),
     "detalhe": ("Detalhe", 30, [
         "Respostas mínimas: uma frase curta.",
@@ -151,7 +151,7 @@ def descrever(cfg: dict) -> str:
         + "\n- Esses níveis mandam no seu estilo, acima de qualquer outra instrução de estilo.\n"
         "- Se ele pedir para mudar um ajuste (ex.: 'humor em 80%', 'menos sarcasmo', 'seja mais formal'), "
         "use a ferramenta ajustar_personalidade e confirme numa frase curta, já no novo estilo, "
-        "dizendo o novo valor, como o TARS de Interestelar faria.\n"
+        "dizendo o novo valor.\n"
     )
     dados = _aprendida()
     if dados["jeitos"]:
