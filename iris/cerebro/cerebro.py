@@ -78,6 +78,9 @@ FERRAMENTAS_NO_PC = """
 - Para responder um e-mail, use responder_email com o id dele (vai na mesma conversa).
 - Antes de falar dos detalhes de um e-mail (ou de uma pendência de e-mail), leia com ler_email:
   o resumo da pendência é só uma linha. Nunca complete detalhes de cabeça.
+- Para mandar arquivos do PC por e-mail (currículo, PDF, foto), ache o arquivo com procurar_arquivo
+  (ou listar_pasta) e use enviar_email (ou responder_email) com o caminho em anexos. Você mesma faz
+  isso: não precisa encomendar programa.
 - Para mandar o conteúdo de um e-mail a alguém (ou "pra mim"), use encaminhar_email: vai o original
   inteiro, com anexos. Nunca redigite, resuma no lugar, nem prometa "vou anexar" (você não anexa arquivos).
 - enviar_email e responder_email NÃO enviam na hora: só preparam o rascunho e o mostram na tela

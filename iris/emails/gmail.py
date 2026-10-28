@@ -1,6 +1,6 @@
 """Gmail pela API oficial, com duas permissões:
   gmail.readonly -> ler e buscar e-mails
-  gmail.send     -> enviar, responder e encaminhar (só enviar: não apaga, não arquiva, não mexe nos existentes)
+  gmail.send     -> enviar (com anexos do PC), responder e encaminhar (só enviar: não apaga, não arquiva, não mexe nos existentes)
 Enviar sempre passa pela confirmação do usuário (veja ferramentas/executor.py).
 
 Arquivos (na pasta dados/, que não vai para o git):
@@ -11,6 +11,7 @@ Arquivos (na pasta dados/, que não vai para o git):
 import base64
 import difflib
 import html
+import mimetypes
 import re
 import time
 import unicodedata
@@ -395,13 +396,45 @@ def _validar_destinatarios(para: str) -> list[str]:
     return enderecos
 
 
-def previa_envio(para: str, assunto: str, texto: str) -> dict:
+def _anexos(caminhos) -> list[Path]:
+    """Confere os arquivos a anexar: precisam existir e estar nas pastas que a Iris pode usar."""
+    from ..ferramentas.pastas import amigavel, resolver, verificar
+
+    if isinstance(caminhos, str):
+        caminhos = [c for c in re.split(r"[;,\n]", caminhos) if c.strip()]
+    arquivos = []
+    for caminho in caminhos or []:
+        alvo = verificar(resolver(str(caminho)))
+        if not alvo.is_file():
+            raise ValueError(f"não achei o arquivo {amigavel(alvo)} para anexar; use procurar_arquivo")
+        arquivos.append(alvo)
+    total = sum(a.stat().st_size for a in arquivos)
+    if total > ambiente.GMAIL_ANEXOS_LIMITE_MB * 1024**2:
+        raise ValueError(f"os anexos somam {total / 1024**2:.1f} MB; o limite do Gmail é "
+                         f"{ambiente.GMAIL_ANEXOS_LIMITE_MB:g} MB")
+    return arquivos
+
+
+def _tamanho(n: int) -> str:
+    return f"{n / 1024**2:.1f} MB" if n >= 1024**2 else f"{max(1, n // 1024)} KB"
+
+
+def _com_anexos(previa: dict, arquivos: list[Path]) -> dict:
+    """Mostra os anexos no cartão de rascunho."""
+    if not arquivos:
+        return previa
+    lista = "\n".join(f"• {a.name} ({_tamanho(a.stat().st_size)})" for a in arquivos)
+    rotulo = "1 anexo" if len(arquivos) == 1 else f"{len(arquivos)} anexos"
+    return {**previa, "acao": f"{previa['acao']} · {rotulo}", "texto": f"{previa['texto']}\n\nAnexos:\n{lista}"}
+
+
+def previa_envio(para: str, assunto: str, texto: str, anexos=None) -> dict:
     """Rascunho mostrado ao usuário antes de enviar (não envia nada)."""
     _exigir_envio()
     if not (texto or "").strip():
         raise ValueError("o e-mail está sem texto")
-    return {"acao": "Novo e-mail", "para": ", ".join(_validar_destinatarios(para)),
-            "assunto": (assunto or "").strip() or "(sem assunto)", "texto": texto.strip()}
+    return _com_anexos({"acao": "Novo e-mail", "para": ", ".join(_validar_destinatarios(para)),
+                        "assunto": (assunto or "").strip() or "(sem assunto)", "texto": texto.strip()}, _anexos(anexos))
 
 
 def _original(id_email: str) -> dict:
@@ -416,7 +449,7 @@ def _assunto_resposta(assunto: str) -> str:
     return assunto if re.match(r"(?i)^\s*(re|res)\s*:", assunto or "") else f"Re: {assunto or ''}".strip()
 
 
-def previa_resposta(id_email: str, texto: str, responder_todos: bool = False) -> dict:
+def previa_resposta(id_email: str, texto: str, responder_todos: bool = False, anexos=None) -> dict:
     _exigir_envio()
     if not (texto or "").strip():
         raise ValueError("a resposta está sem texto")
@@ -427,30 +460,40 @@ def previa_resposta(id_email: str, texto: str, responder_todos: bool = False) ->
         meu = _obter_servico().users().getProfile(userId="me").execute()["emailAddress"].lower()
         extras = [e for e in list(_enderecos(cab.get("to", ""))) + list(_enderecos(cab.get("cc", ""))) if e != meu]
         para += [e for e in extras if e not in para]
-    return {"acao": "Resposta", "para": ", ".join(para), "assunto": _assunto_resposta(cab.get("subject", "")),
-            "texto": texto.strip()}
+    return _com_anexos({"acao": "Resposta", "para": ", ".join(para), "assunto": _assunto_resposta(cab.get("subject", "")),
+                        "texto": texto.strip()}, _anexos(anexos))
 
 
-def _enviar_mime(para: str, assunto: str, texto: str, extras: dict | None = None, thread: str | None = None) -> dict:
+def _enviar_mime(para: str, assunto: str, texto: str, extras: dict | None = None, thread: str | None = None,
+                 anexos: list[Path] | None = None) -> dict:
     mensagem = EmailMessage()
     mensagem["To"] = para
     mensagem["Subject"] = assunto
     for chave, valor in (extras or {}).items():
         mensagem[chave] = valor
     mensagem.set_content(texto)
+    for arquivo in anexos or []:
+        tipo = mimetypes.guess_type(arquivo.name)[0] or "application/octet-stream"
+        principal, sub = tipo.split("/", 1)
+        mensagem.add_attachment(arquivo.read_bytes(), maintype=principal, subtype=sub, filename=arquivo.name)
     corpo = {"raw": base64.urlsafe_b64encode(mensagem.as_bytes()).decode()}
     if thread:
         corpo["threadId"] = thread
     enviado = _obter_servico().users().messages().send(userId="me", body=corpo).execute()
-    return {"enviado": True, "para": para, "assunto": assunto, "id": enviado.get("id")}
+    resultado = {"enviado": True, "para": para, "assunto": assunto, "id": enviado.get("id")}
+    if anexos:
+        resultado["anexos"] = [a.name for a in anexos]
+    return resultado
 
 
-def enviar(para: str, assunto: str, texto: str) -> dict:
+def enviar(para: str, assunto: str, texto: str, anexos=None) -> dict:
+    arquivos = _anexos(anexos)
     previa = previa_envio(para, assunto, texto)
-    return _enviar_mime(previa["para"], previa["assunto"], previa["texto"])
+    return _enviar_mime(previa["para"], previa["assunto"], previa["texto"], anexos=arquivos)
 
 
-def responder(id_email: str, texto: str, responder_todos: bool = False) -> dict:
+def responder(id_email: str, texto: str, responder_todos: bool = False, anexos=None) -> dict:
+    arquivos = _anexos(anexos)
     previa = previa_resposta(id_email, texto, responder_todos)
     cab = _original(id_email)
     id_original = cab["cab"].get("message-id", "")
@@ -458,7 +501,7 @@ def responder(id_email: str, texto: str, responder_todos: bool = False) -> dict:
     if id_original:  # faz a resposta aparecer na mesma conversa, para os dois lados
         extras = {"In-Reply-To": id_original,
                   "References": f"{cab['cab'].get('references', '')} {id_original}".strip()}
-    return _enviar_mime(previa["para"], previa["assunto"], previa["texto"], extras, cab["thread"])
+    return _enviar_mime(previa["para"], previa["assunto"], previa["texto"], extras, cab["thread"], arquivos)
 
 
 # ---------- Encaminhar (o e-mail original inteiro, com anexos, sem redigitar) ----------
