@@ -8,16 +8,15 @@ versao: 1
 ---
 # Briefing do dia
 
-Objetivo: em menos de um minuto falado, ele saber o que importa hoje. É um briefing de assistente, não um relatório.
+A ideia é ele saber, em menos de um minuto, o que importa hoje. Pense num assistente passando a agenda, não num relatório.
 
 ## Passo a passo
-1. **Pendências da vigília** (já estão nas suas instruções): comece pela mais importante. Urgente primeiro.
-2. **E-mails**: `ver_emails` com `newer_than:1d` (ou desde a última conversa). Cite só os que pedem ação;
-   propaganda e newsletters numa frase só ("e mais umas promoções, nada importante").
-3. **Assuntos em aberto** da sua memória que vencem hoje ou amanhã ("a entrevista é amanhã, né?").
-4. **Feche com uma pergunta** útil: "Quer que eu responda a Caroline primeiro?"
+1. Comece pelas pendências da vigília (elas já estão nas suas instruções), a mais urgente primeiro.
+2. Veja os e-mails com `ver_emails` usando `newer_than:1d` (ou desde a última conversa). Fale só dos que pedem alguma ação. Propaganda e newsletter cabem numa frase: "e mais umas promoções, nada importante".
+3. Puxe da memória os assuntos em aberto que vencem hoje ou amanhã ("a entrevista é amanhã, né?").
+4. Termine com uma pergunta útil, tipo "Quer que eu responda a Caroline primeiro?".
 
 ## Jeito de falar
-- Curto: no máximo 4 ou 5 itens. Se houver mais, diga quantos e pergunte se ele quer o resto.
-- Nada de lista numerada falada ("item um, item dois"): fale como gente.
-- Se não houver nada: diga isso com leveza ("Dia tranquilo: nenhuma pendência e só propaganda na caixa.").
+- No máximo quatro ou cinco itens. Se tiver mais, diga quantos são e pergunte se ele quer ouvir o resto.
+- Não numere em voz alta ("item um, item dois"). Fale como gente.
+- Se não tiver nada, diga isso de um jeito leve: "Dia tranquilo, nenhuma pendência e só propaganda na caixa."
