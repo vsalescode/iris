@@ -1,0 +1,232 @@
+/* ===== Paleta ===== */
+:root {
+  --fundo: #010409;
+  --ciano: #5ee9ff;
+  --ciano-claro: #d9faff;
+  --texto: #e6f9ff;
+  --texto-fraco: rgba(200, 235, 245, 0.45);
+  --linha: rgba(94, 233, 255, 0.18);
+  --verde: #3dffa8;
+  --amarelo: #ffd23d;
+  --vermelho: #ff4d6a;
+  --fonte-fala: "Exo 2", "Segoe UI", sans-serif;
+  --fonte-hud: "Orbitron", "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+
+body {
+  background: radial-gradient(ellipse at 50% 42%, #04121f 0%, var(--fundo) 65%);
+  color: var(--texto);
+  font-family: var(--fonte-fala);
+  overflow: hidden;
+  user-select: none;
+  transition: background 1.2s ease;
+}
+/* o fundo ganha um leve tom do estado */
+body[data-estado="OUVINDO"] { background: radial-gradient(ellipse at 50% 42%, #062236 0%, var(--fundo) 65%); }
+body[data-estado="PENSANDO"] { background: radial-gradient(ellipse at 50% 42%, #0b0f33 0%, var(--fundo) 65%); }
+body[data-estado="FALANDO"] { background: radial-gradient(ellipse at 50% 42%, #05202e 0%, var(--fundo) 65%); }
+
+#orbe { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+.vinheta {
+  position: fixed; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.65) 100%);
+}
+
+/* ===== Cantos ===== */
+.canto {
+  position: fixed; z-index: 5; display: flex; align-items: center; gap: 14px;
+  opacity: 0.55; transition: opacity 0.3s;
+}
+.canto:hover { opacity: 1; }
+.sup-esq { top: 22px; left: 26px; flex-direction: column; align-items: flex-start; gap: 4px; }
+.sup-dir { top: 20px; right: 24px; font-family: var(--fonte-hud); font-size: 11px; letter-spacing: 2px; color: var(--texto-fraco); }
+.marca { font-family: var(--fonte-hud); font-weight: 700; font-size: 13px; letter-spacing: 8px; color: var(--ciano); }
+.estado { font-size: 13px; font-weight: 300; letter-spacing: 1.5px; color: var(--texto-fraco); }
+
+.ponto { width: 6px; height: 6px; border-radius: 50%; background: var(--vermelho); box-shadow: 0 0 8px currentColor; color: var(--vermelho); }
+.ponto.ok { background: var(--verde); color: var(--verde); }
+.ponto.alerta { background: var(--amarelo); color: var(--amarelo); }
+
+.icone {
+  display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+  background: transparent; border: 1px solid transparent; color: var(--ciano-claro); cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.icone:hover { border-color: var(--linha); background: rgba(94, 233, 255, 0.06); }
+
+/* ===== Fala (legenda) ===== */
+.legenda {
+  position: fixed; z-index: 4; left: 50%; bottom: 9vh; transform: translateX(-50%);
+  width: min(980px, 88vw); text-align: center;
+  font-size: clamp(20px, 2.3vw, 32px); font-weight: 300; line-height: 1.45; letter-spacing: 0.3px;
+  color: var(--texto); text-shadow: 0 0 18px rgba(94, 233, 255, 0.25), 0 2px 12px rgba(0, 0, 0, 0.8);
+  transition: opacity 0.8s ease;
+  min-height: 2.9em;
+}
+.legenda.sumindo { opacity: 0; }
+.legenda .p { display: inline; opacity: 0; filter: blur(4px); animation: surgir-palavra 0.45s ease forwards; }
+.legenda .p.antiga { animation: none; opacity: 0.32; filter: none; transition: opacity 0.6s; }
+@keyframes surgir-palavra { to { opacity: 1; filter: blur(0); } }
+
+/* sua fala: menor, mais apagada, em itálico */
+.legenda[data-quem="voce"] { font-size: clamp(16px, 1.6vw, 22px); font-style: italic; color: var(--texto-fraco); text-shadow: none; }
+.legenda[data-quem="voce"] .final { color: rgba(220, 245, 255, 0.75); }
+
+.dica {
+  position: fixed; left: 50%; bottom: 5vh; transform: translateX(-50%);
+  font-size: 13px; font-weight: 300; letter-spacing: 3px; color: var(--texto-fraco);
+  transition: opacity 0.6s;
+}
+body:not([data-estado="IDLE"]) .dica { opacity: 0; }
+
+/* ===== Digitar ===== */
+.digitar {
+  position: fixed; z-index: 8; left: 50%; bottom: 3vh; transform: translateX(-50%);
+  width: min(640px, 90vw); animation: aviso-entra 0.3s ease both;
+}
+.digitar[hidden] { display: none; }
+.digitar input {
+  width: 100%; padding: 12px 18px; border-radius: 24px; outline: none;
+  background: rgba(3, 14, 26, 0.85); backdrop-filter: blur(8px);
+  border: 1px solid var(--linha); color: var(--texto);
+  font-family: var(--fonte-fala); font-size: 17px; font-weight: 300;
+}
+.digitar input:focus { border-color: var(--ciano); box-shadow: 0 0 24px rgba(94, 233, 255, 0.15); }
+body:has(.digitar:not([hidden])) .dica { opacity: 0; }
+
+/* ===== Avisos (ações das ferramentas, erros) ===== */
+.avisos {
+  position: fixed; z-index: 6; top: 78px; left: 26px; display: flex; flex-direction: column; gap: 8px;
+  max-width: min(380px, 70vw); pointer-events: none;
+}
+.aviso {
+  font-size: 13px; font-weight: 300; color: var(--ciano-claro); letter-spacing: 0.3px;
+  padding: 7px 12px; border-left: 2px solid var(--ciano);
+  background: linear-gradient(to right, rgba(94, 233, 255, 0.1), transparent);
+  animation: aviso-entra 0.4s ease both;
+  transition: opacity 0.8s, transform 0.8s;
+}
+.aviso.saindo { opacity: 0; transform: translateX(-10px); }
+@keyframes aviso-entra { from { opacity: 0; transform: translateX(-10px); } }
+
+/* ===== Rascunho esperando confirmação ===== */
+.rascunho {
+  position: fixed; z-index: 7; top: 50%; right: 4vw; transform: translateY(-55%);
+  width: min(400px, 40vw); max-height: 62vh; display: flex; flex-direction: column;
+  padding: 18px 20px; border-radius: 8px;
+  background: rgba(3, 14, 26, 0.82); backdrop-filter: blur(8px);
+  border: 1px solid var(--linha); box-shadow: 0 0 40px rgba(94, 233, 255, 0.1);
+  animation: rascunho-entra 0.45s ease both;
+}
+.rascunho[hidden] { display: none; }
+/* com a gaveta aberta, o cartão fica ao lado dela (e não por baixo) */
+body.gaveta-aberta .rascunho { z-index: 12; right: calc(min(380px, 92vw) + 2vw); }
+.habilidades .botoes { display: flex; gap: 4px; }
+.habilidades li .botoes button { opacity: 1; font-size: 11px; font-family: var(--fonte-hud); letter-spacing: 1px; padding: 2px 6px;
+  border: 1px solid var(--linha); border-radius: 3px; color: var(--texto-fraco); }
+.habilidades li .botoes button:hover { color: var(--ciano); border-color: var(--ciano); }
+.habilidades li .botoes button.aprovar:hover { color: var(--verde); border-color: var(--verde); }
+.habilidades li .botoes button.recusar:hover { color: var(--vermelho); border-color: var(--vermelho); }
+.habilidades li .tipo.proposta { color: var(--amarelo); }
+.habilidades li .tipo.ativa { color: var(--verde); }
+@keyframes rascunho-entra { from { opacity: 0; transform: translate(20px, -55%); } }
+.rascunho h2 {
+  font-family: var(--fonte-hud); font-size: 10px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--ciano); margin-bottom: 12px;
+}
+.rascunho dl { display: grid; grid-template-columns: 64px 1fr; gap: 4px 10px; font-size: 14px; font-weight: 300; margin-bottom: 12px; }
+.rascunho dt { color: var(--texto-fraco); }
+.rascunho dd { word-break: break-word; }
+.rascunho-texto {
+  flex: 1; overflow-y: auto; white-space: pre-wrap; font-size: 15px; font-weight: 300; line-height: 1.5;
+  padding: 12px 0; border-top: 1px solid var(--linha); border-bottom: 1px solid var(--linha);
+}
+.rascunho-dica { margin-top: 10px; font-size: 12px; letter-spacing: 1.5px; color: var(--texto-fraco); text-align: center; }
+
+/* ===== Gaveta (Tab) ===== */
+.gaveta {
+  position: fixed; z-index: 10; top: 0; right: 0; bottom: 0; width: min(380px, 92vw);
+  padding: 70px 24px 24px; overflow-y: auto;
+  background: rgba(2, 10, 18, 0.88); backdrop-filter: blur(10px);
+  border-left: 1px solid var(--linha);
+  transform: translateX(100%); transition: transform 0.35s ease;
+}
+.gaveta.aberta { transform: none; }
+.gaveta .fechar { position: absolute; top: 18px; left: 18px; }
+.sup-dir { z-index: 11; } /* os botões do canto ficam por cima da gaveta */
+.gaveta h2 {
+  font-family: var(--fonte-hud); font-size: 10px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--ciano); margin: 18px 0 10px;
+}
+.gaveta h2:first-child { margin-top: 0; }
+.log { list-style: none; display: flex; flex-direction: column; gap: 7px; max-height: 45vh; overflow-y: auto; font-size: 14px; }
+.log li { display: grid; grid-template-columns: auto auto 1fr; gap: 8px; font-weight: 300; }
+.log .hora { color: var(--texto-fraco); font-size: 11px; padding-top: 2px; }
+.log .quem { font-family: var(--fonte-hud); font-size: 9px; letter-spacing: 1px; padding-top: 3px; }
+.log .quem.voce { color: #8fb4ff; }
+.log .quem.iris { color: var(--ciano); }
+.log .quem.sistema { color: var(--amarelo); }
+.sistema { display: grid; grid-template-columns: 60px 1fr; gap: 6px 10px; font-size: 13px; font-weight: 300; }
+.sistema dt { color: var(--texto-fraco); font-family: var(--fonte-hud); font-size: 9px; letter-spacing: 2px; padding-top: 3px; }
+.barra { display: inline-block; width: 90px; height: 3px; background: rgba(94, 233, 255, 0.12); position: relative; vertical-align: middle; }
+.barra i { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--ciano); transition: width 0.8s; }
+.futuro { font-size: 13px; font-weight: 300; color: var(--texto-fraco); }
+.contador { color: var(--texto-fraco); letter-spacing: 1px; margin-left: 6px; }
+.memoria { list-style: none; display: flex; flex-direction: column; gap: 4px; max-height: 26vh; overflow-y: auto; margin-bottom: 6px; }
+.memoria li {
+  display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; font-weight: 300; line-height: 1.35;
+  padding: 5px 6px; border-radius: 4px;
+}
+.memoria li:hover { background: rgba(94, 233, 255, 0.05); }
+.memoria li .texto { flex: 1; }
+.memoria li .tipo { font-family: var(--fonte-hud); font-size: 8px; letter-spacing: 1.5px; color: var(--amarelo); padding-top: 3px; }
+.memoria li button {
+  opacity: 0; background: none; border: none; color: var(--texto-fraco); cursor: pointer; font-size: 15px; line-height: 1;
+}
+.memoria li:hover button { opacity: 1; }
+.memoria li .tipo.urgente { color: var(--vermelho); }
+.log.pensamentos { max-height: 30vh; font-size: 13px; color: var(--texto-fraco); }
+.log.pensamentos li:first-child .texto { color: var(--texto); }
+.memoria li button:hover { color: var(--vermelho); }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-thumb { background: var(--linha); }
+
+/* ===== Configurações ===== */
+dialog.config {
+  margin: auto; border: 1px solid var(--linha); border-radius: 6px; background: rgba(3, 12, 22, 0.96);
+  color: var(--texto); padding: 24px; width: min(520px, 92vw); box-shadow: 0 0 60px rgba(94, 233, 255, 0.12);
+  max-height: 88vh; overflow-y: auto; /* nunca passa do tamanho da tela: os botões ficam sempre alcançáveis */
+}
+dialog.config h3 {
+  font-family: var(--fonte-hud); font-size: 10px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--ciano); margin: 22px 0 6px; padding-top: 16px; border-top: 1px solid var(--linha);
+}
+.tracos { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 20px; margin-bottom: 14px; }
+.tracos label { margin-bottom: 8px; }
+.tracos .rotulo-traco { display: flex; justify-content: space-between; }
+dialog.config::backdrop { background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(4px); }
+dialog.config h2 { font-family: var(--fonte-hud); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--ciano); margin-bottom: 18px; }
+dialog.config label { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; font-size: 14px; font-weight: 300; color: var(--texto-fraco); }
+dialog.config input, dialog.config select {
+  background: rgba(94, 233, 255, 0.05); border: 1px solid var(--linha); border-radius: 4px; color: var(--texto);
+  font-family: var(--fonte-fala); font-size: 16px; padding: 8px 10px; outline: none;
+}
+dialog.config input:focus, dialog.config select:focus { border-color: var(--ciano); }
+dialog.config option, dialog.config optgroup { background: #04121f; }
+dialog.config output { color: var(--ciano); margin-left: 6px; }
+dialog.config input[type="range"] { padding: 0; accent-color: var(--ciano); background: transparent; border: none; }
+.linha-voz { display: flex; gap: 8px; }
+.linha-voz select { flex: 1; min-width: 0; }
+.nota { font-size: 13px; font-weight: 300; color: var(--texto-fraco); margin: -4px 0 14px; line-height: 1.4; }
+.acoes { display: flex; justify-content: flex-end; gap: 10px; }
+.botao {
+  font-family: var(--fonte-hud); font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  background: rgba(94, 233, 255, 0.1); border: 1px solid var(--ciano); border-radius: 4px; color: var(--ciano);
+  padding: 9px 14px; cursor: pointer; white-space: nowrap;
+}
+.botao:hover { background: rgba(94, 233, 255, 0.2); }
+.botao.secundario { border-color: var(--linha); color: var(--texto-fraco); background: transparent; }
