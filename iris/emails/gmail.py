@@ -177,13 +177,13 @@ def _com_calma(funcao, *args):
 
 
 def _remetente_parecido(termo: str) -> tuple[str, str] | None:
-    """Acha o remetente com nome mais parecido com o que foi falado ("InfinityPay" -> InfinitePay,
-    "Mano Deivin" -> Mano Deyvin)."""
+    """Acha o remetente com nome mais parecido com o que foi falado ("Ifood" -> iFood,
+    "Joana Silvia" -> Joana Silva)."""
     alvo = _normalizar(termo)
     if len(alvo) < 3:
         return None
     # 1º: busca cada palavra do nome (barato, e acha até e-mails antigos: a palavra escrita
-    # certo encontra o remetente; ex.: "Mano" acha "Mano Deyvin")
+    # certo encontra o remetente; ex.: "Joana" acha "Joana Silva")
     candidatos: dict[str, str] = {}
     for palavra in [p for p in termo.split() if len(_normalizar(p)) >= 4][:3]:
         candidatos.update(_com_calma(_remetentes_da_busca, palavra, 20))

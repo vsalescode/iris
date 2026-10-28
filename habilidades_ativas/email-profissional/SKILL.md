@@ -13,9 +13,9 @@ versao: 1
 - Se faltar algo importante (data, valor, se é sim ou não), pergunte a ele rapidinho antes de redigir.
 
 ## Estrutura
-1. Cumprimente pelo nome ("Olá, Caroline,").
+1. Cumprimente pelo nome ("Olá, Marina,").
 2. Uma frase de contexto ou agradecimento, sem exagero.
-3. O assunto principal, direto: confirmar, propor ou pedir. Escreva datas e horários por completo ("quinta-feira, 30/10, às 14h").
+3. O assunto principal, direto: confirmar, propor ou pedir. Escreva datas e horários por completo ("quinta-feira, 12/03, às 14h").
 4. O próximo passo ("Fico no aguardo do link da reunião.").
 5. Uma despedida simples ("Abraço," ou "Atenciosamente,") e o nome dele.
 
@@ -26,8 +26,8 @@ versao: 1
 - Entre três e oito linhas. Sem gíria, sem emoji e sem "venho por meio desta".
 
 ## Exemplo (confirmar uma entrevista)
-> Olá, Caroline,
-> Obrigado pelo retorno! Confirmo a entrevista técnica na quinta-feira, 30/10, às 14h.
+> Olá, Marina,
+> Obrigado pelo retorno! Confirmo a entrevista técnica na quinta-feira, 12/03, às 14h.
 > Fico no aguardo do link. Abraço,
 > {nome_usuario}
 
