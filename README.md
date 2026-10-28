@@ -8,7 +8,7 @@ A IA roda na nuvem, nos planos gratuitos do Google Gemini e do Groq. O seu PC s�
 
 - Conversa por voz em tempo real. Você diz "Iris" uma vez e fala à vontade, sem repetir o nome. Dá para interromper no meio da frase dela.
 - Mexe no PC. Abre programas e sites, procura arquivos e lê textos e PDFs (inclusive escaneados). Também cria arquivos e move coisas de lugar, mas pede sua confirmação antes.
-- Gmail. Lê e resume, responde, escreve e encaminha e-mails. Nada é enviado sem você ver o rascunho na tela e dizer "pode enviar".
+- Gmail. Lê e resume, responde, escreve e encaminha e-mails, e anexa arquivos do seu PC. Nada é enviado sem você ver o rascunho na tela e dizer "pode enviar".
 - Memória. Guarda fatos sobre você, um resumo de cada conversa e assuntos pendentes. Uns dias depois ela pergunta: "e a entrevista, como foi?".
 - Vigília. A cada 5 minutos ela confere se chegou e-mail ou arquivo novo e separa o que é importante do que é propaganda. Se for urgente, ela mesma puxa o assunto.
 - Personalidade ajustável. Humor, sarcasmo, franqueza, formalidade, tamanho das respostas e iniciativa vão de 0 a 100%, por voz ("Iris, humor em 80%") ou pela tela. Ela também percebe do que você gosta e propõe ajustes no próprio jeito, mas só muda o que você aprovar.
@@ -64,6 +64,7 @@ Alguns pedidos para começar:
 - "Lê o PDF do contrato que está na área de trabalho e me diz o prazo"
 - "Chegou algum e-mail importante?"
 - "Responde a Ana dizendo que amanhã eu confirmo"
+- "Manda meu currículo para a recrutadora"
 - "Lembra que eu sou alérgico a camarão"
 - "O que você sabe sobre mim?"
 - "Menos sarcasmo" / "seja mais formal" / "usa a voz Kore"

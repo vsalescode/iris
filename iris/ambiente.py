@@ -140,5 +140,6 @@ ARQUIVO_PDF_LEITURA_NUVEM = _sim_nao("ARQUIVO_PDF_LEITURA_NUVEM", True)  # PDF e
 GMAIL_LIMITE_CORPO = _inteiro("GMAIL_LIMITE_CORPO", 8000)               # caracteres do e-mail enviados à IA
 GMAIL_TAMANHO_LOTE = _inteiro("GMAIL_TAMANHO_LOTE", 40)                 # o Gmail limita ~50 leituras/s
 GMAIL_PERMITIR_ENVIO = _sim_nao("GMAIL_PERMITIR_ENVIO", True)           # false = ela só lê e-mails
+GMAIL_ANEXOS_LIMITE_MB = _decimal("GMAIL_ANEXOS_LIMITE_MB", 24)          # soma dos anexos (o Gmail aceita até 25 MB)
 GMAIL_CREDENCIAIS = _texto("GMAIL_CREDENCIAIS", "")   # vazio = dados/gmail_credenciais.json
 GMAIL_TOKEN = _texto("GMAIL_TOKEN", "")               # vazio = dados/gmail_token.json

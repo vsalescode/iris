@@ -44,8 +44,11 @@ PDFs digitais são lidos no seu PC. PDFs escaneados (só imagem) são enviados a
 | Escrever um e-mail novo | "manda um e-mail pro Rodrigo dizendo que..." | sempre pergunta |
 | Responder um e-mail, na mesma conversa | "responde a Marina confirmando" | sempre pergunta |
 | Encaminhar um e-mail inteiro, com anexos | "me manda aquele e-mail da vaga" | sempre pergunta |
+| Anexar arquivos do PC a um e-mail novo ou a uma resposta | "manda meu currículo pra recrutadora" | sempre pergunta |
 
-Antes de enviar qualquer coisa, o rascunho aparece na tela e ela lê para você. Só sai depois do seu "pode enviar". Ela entende nomes falados errado ("Joana Silvia" quando o remetente é "Joana Silva") comparando com quem já te escreveu, e entende endereços ditados ("fulano arroba gmail ponto com").
+Antes de enviar qualquer coisa, o rascunho aparece na tela, com a lista de anexos quando houver, e ela lê para você. Só sai depois do seu "pode enviar". Ela entende nomes falados errado ("Joana Silvia" quando o remetente é "Joana Silva") comparando com quem já te escreveu, e entende endereços ditados ("fulano arroba gmail ponto com").
+
+Os anexos somam até 24 MB (`GMAIL_ANEXOS_LIMITE_MB`) e só podem vir das pastas que ela tem permissão de acessar.
 
 A permissão pedida ao Google é só de ler e enviar. Ela não consegue apagar, arquivar nem marcar e-mails.
 
@@ -130,6 +133,7 @@ Além dos seis ajustes de fábrica (humor, sarcasmo, franqueza, formalidade, det
 | organizar-downloads | Arruma uma pasta bagunçada em subpastas por tipo, sem apagar nada |
 | organizar-comprovantes | Organiza boletos e notas em pastas por ano e mês, com nomes padronizados e uma planilha de resumo |
 | email-profissional | Escreve e-mails de trabalho no tom certo para recrutador, empresa, suporte ou colega |
+| enviar-arquivo-por-email | Acha um arquivo no PC e manda por e-mail como anexo |
 | texto-natural | Revisa um texto para soar como gente, sem mudar o conteúdo |
 | pensar-junto | Ajuda a transformar uma ideia solta num plano, uma pergunta por vez |
 | criar-habilidade | O manual que ela segue para escrever habilidades novas |

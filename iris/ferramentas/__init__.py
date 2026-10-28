@@ -43,6 +43,12 @@ def _objeto(obrigatorios: list[str], **props) -> dict:
     return {"type": "object", "properties": props, "required": obrigatorios}
 
 
+ANEXOS = {
+    "type": "array", "items": {"type": "string"},
+    "description": "Opcional: arquivos do PC para anexar, com o caminho como nas ferramentas de arquivo "
+                   "(ex.: 'Downloads/curriculo.pdf'). Ache o caminho certo com procurar_arquivo antes.",
+}
+
 CAMINHO = (
     "Caminho do arquivo ou pasta. Pode começar por Área de Trabalho, Documentos, Downloads, "
     "Imagens, Músicas ou Vídeos (ex.: 'Downloads/nota.txt'). Sem pasta = Área de Trabalho."
@@ -124,16 +130,19 @@ FERRAMENTAS = [
         "enviar_email", "email.enviar",
         "Prepara um e-mail novo e mostra o rascunho na tela dele. NÃO envia na hora: o envio só acontece "
         "depois de confirmar_acao, quando ele disser sim. Chame assim que tiver o conteúdo, sem perguntar antes. "
-        "Para o próprio e-mail dele, use o endereço dele (está nas suas instruções).",
+        "Para o próprio e-mail dele, use o endereço dele (está nas suas instruções). "
+        "Para mandar arquivos do PC (currículo, PDF, foto), passe os caminhos em anexos.",
         _objeto(
             ["para", "assunto", "texto"],
             para=_texto("Endereço(s) de e-mail, separados por vírgula (use procurar_contato se só souber o nome)"),
             assunto=_texto("Assunto"),
             texto=_texto("Texto do e-mail, escrito como se fosse ele (primeira pessoa), em português"),
+            anexos=ANEXOS,
         ),
-        lambda a: gmail.enviar(a["para"], a["assunto"], a["texto"]),
-        lambda a: f"enviar e-mail para {a.get('para')} (assunto: {a.get('assunto')})",
-        previa=lambda a: gmail.previa_envio(a["para"], a["assunto"], a["texto"]),
+        lambda a: gmail.enviar(a["para"], a["assunto"], a["texto"], a.get("anexos")),
+        lambda a: f"enviar e-mail para {a.get('para')} (assunto: {a.get('assunto')})"
+                  + (f" com {len(a['anexos'])} anexo(s)" if a.get("anexos") else ""),
+        previa=lambda a: gmail.previa_envio(a["para"], a["assunto"], a["texto"], a.get("anexos")),
     ),
     Ferramenta(
         "responder_email", "email.responder",
@@ -144,10 +153,11 @@ FERRAMENTAS = [
             id=_texto("O id do e-mail que está sendo respondido"),
             texto=_texto("Texto da resposta, escrito como se fosse ele (primeira pessoa)"),
             responder_todos={"type": "boolean", "description": "Responder também a todos que estavam no e-mail"},
+            anexos=ANEXOS,
         ),
-        lambda a: gmail.responder(a["id"], a["texto"], bool(a.get("responder_todos"))),
-        lambda a: "responder o e-mail",
-        previa=lambda a: gmail.previa_resposta(a["id"], a["texto"], bool(a.get("responder_todos"))),
+        lambda a: gmail.responder(a["id"], a["texto"], bool(a.get("responder_todos")), a.get("anexos")),
+        lambda a: "responder o e-mail" + (f" com {len(a['anexos'])} anexo(s)" if a.get("anexos") else ""),
+        previa=lambda a: gmail.previa_resposta(a["id"], a["texto"], bool(a.get("responder_todos")), a.get("anexos")),
     ),
     Ferramenta(
         "encaminhar_email", "email.encaminhar",
