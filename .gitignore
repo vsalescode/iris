@@ -1,0 +1,20 @@
+# chaves e ambiente
+.env
+.venv/
+__pycache__/
+*.pyc
+
+# dados pessoais (memória, Gmail, auditoria)
+dados/*
+!dados/.gitkeep
+personalidade_aprendida.yaml
+
+# o que cada instalação cria
+habilidades_propostas/*
+!habilidades_propostas/.gitkeep
+habilidades_ativas/*/SKILL.v*.md
+oficina/.venv/
+oficina/.encomendas/
+oficina/aprovados.json
+oficina/programas/*
+!oficina/programas/.gitkeep

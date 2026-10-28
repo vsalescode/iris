@@ -1,0 +1,23 @@
+# Suas PREFERÊNCIAS. A engrenagem da interface e os comandos de voz também editam este arquivo.
+# (Ajustes técnicos, como modelos de IA, tempos e limites, ficam no arquivo .env.)
+
+usuario:
+  nome: ""                 # como a Iris te chama; vazio = ela pergunta
+
+# Ajustes de personalidade (0 a 100), estilo TARS de Interestelar.
+# Também dá para mudar por voz: "Iris, humor em 80%", "menos sarcasmo", "seja mais formal".
+personalidade:
+  humor: 40                    # piadas e tiradas
+  sarcasmo: 40                 # ironia e alfinetadas (nunca ofensivas)
+  franqueza: 85                # do diplomático ao brutalmente honesto (mentir sobre fatos, nunca)
+  formalidade: 35              # de amiga informal a mordomo estilo JARVIS ("senhor")
+  detalhe: 50                  # tamanho das respostas
+  iniciativa: 50               # o quanto ela sugere e puxa assunto sozinha
+
+voz:
+  nome: "gemini:Aoede"         # troque pela engrenagem (tem botão para ouvir cada voz)
+  velocidade: "+0%"            # só vozes Edge: "+10%" mais rápida, "-10%" mais lenta
+  tom: "+0Hz"                  # só vozes Edge: "-5Hz" mais grave, "+5Hz" mais aguda
+
+ouvir:
+  conversa_segundos: 60        # em conversa, silêncio que encerra (volta a esperar o "Iris")
