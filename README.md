@@ -149,8 +149,9 @@ Ela não guarda senhas, cartões nem documentos; na transcrição salva, número
   Ajustes `PERSONALIDADE_*` no `.env` (`PERSONALIDADE_EVOLUIR=false` desliga as propostas automáticas).
 
 ## Interface
-- A íris no centro é ela, feita de fibras de luz: em espera a pupila respira; ouvindo, ela dilata com a sua voz e se acende;
-  pensando, as camadas de fibras giram em sentidos opostos, tudo fica violeta e um arco varre em volta; falando, ondas de luz saem da pupila.
+- No centro está ela: a **íris de uma lente** (o diafragma de lâminas de uma câmera) cercada de anéis de instrumento.
+  Em espera o diafragma respira; ouvindo, ele abre e o medidor de barras acompanha a sua voz; pensando, as lâminas
+  fecham e giram, uma onda corre pelo medidor e um arco varre em volta (tom violeta); falando, o medidor pulsa com a voz dela.
 - A fala aparece embaixo, à esquerda, no ritmo da voz. Ações aparecem como avisos rápidos no canto.
 - **Tab** (ou ☰) abre a gaveta com o registro e o status do sistema; **Esc**, × ou clicar fora fecha.
 
