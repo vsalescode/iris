@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(./**)",
+      "Edit(./programas/**)",
+      "Write(./programas/**)",
+      "Bash(.venv/Scripts/python.exe *)",
+      "Bash(.venv\\Scripts\\python.exe *)",
+      "Bash(python *)"
+    ],
+    "deny": [
+      "Read(../.env)",
+      "Read(../.env.*)",
+      "Read(../dados/**)",
+      "Read(../iris/**)",
+      "Edit(../**)",
+      "Write(../**)",
+      "Edit(./CLAUDE.md)",
+      "Edit(./.claude/**)",
+      "Write(./CLAUDE.md)",
+      "Write(./.claude/**)",
+      "WebFetch",
+      "Bash(curl *)",
+      "Bash(del *)",
+      "Bash(rm *)",
+      "Bash(Remove-Item *)"
+    ]
+  }
+}
