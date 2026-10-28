@@ -4,13 +4,13 @@
 usuario:
   nome: ""                 # como a Iris te chama; vazio = ela pergunta
 
-# Ajustes de personalidade (0 a 100), estilo TARS de Interestelar.
+# Ajustes de personalidade (0 a 100).
 # Também dá para mudar por voz: "Iris, humor em 80%", "menos sarcasmo", "seja mais formal".
 personalidade:
   humor: 40                    # piadas e tiradas
   sarcasmo: 40                 # ironia e alfinetadas (nunca ofensivas)
   franqueza: 85                # do diplomático ao brutalmente honesto (mentir sobre fatos, nunca)
-  formalidade: 35              # de amiga informal a mordomo estilo JARVIS ("senhor")
+  formalidade: 35              # de amiga informal a mordomo ("senhor")
   detalhe: 50                  # tamanho das respostas
   iniciativa: 50               # o quanto ela sugere e puxa assunto sozinha
 
